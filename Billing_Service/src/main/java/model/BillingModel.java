@@ -277,5 +277,81 @@ public class BillingModel {
 			return name;
 			
 		}
+		
+		public String readBillDetails()
+		{
+			 String output = "";
+			 try{
+				 Connection con = connect();
+				 if (con == null){
+					 return "Error While Connecting to the Database for Reading!";
+				 }
+				 
+				output = "<table border='1'><tr><th>Account No</th>"
+						 +"<th>Name</th><th>Address</th>"
+						 +"<th>From Date</th>"
+						 +"<th>Previous Meter Reading</th>"
+						 +"<th>To Date</th>"
+						 +"<th>Current Meter Reading</th>"
+						 +"<th>No of Units</th>"
+						 +"<th>Current Amount</th>"
+						 +"<th>Arrears</th>"
+						 +"<th>Total Amount</th>"
+						 +"<th>Status</th>"
+						 +"<th>Update</th><th>Remove</th></tr>";
+						 String query = "select * from billing_service";
+						 Statement stmt = (Statement) con.createStatement();
+						 ResultSet rs = ((java.sql.Statement) stmt).executeQuery(query); 
+						 
+				while (rs.next()){
+					String id = Integer.toString(rs.getInt("id"));
+					String account_no = rs.getString("account_no");
+					String name = rs.getString("name");
+					String address = rs.getString("address");
+					Date from_date = rs.getDate("from_date");
+					String prev_meter_reading = Integer.toString(rs.getInt("previous_meter_reading"));
+					Date to_date = rs.getDate("to_date");
+					String cur_meter_reading = Integer.toString(rs.getInt("current_meter_reading"));
+					String no_of_units = Integer.toString(rs.getInt("no_of_units"));
+					String current_amount = Float.toString(rs.getFloat("current_amount"));
+					String arrears = Float.toString(rs.getFloat("amount_in_arrears"));
+					String total_amount = Float.toString(rs.getFloat("total_amount"));
+					String status = rs.getString("status");
+					
+					 // Add a row into the html table
+					output += "<tr><td>" + account_no + "</td>";
+					output += "<td>" + name + "</td>";
+					output += "<td>" + address + "</td>";
+					output += "<td>" + from_date + "</td>";
+					output += "<td>" + prev_meter_reading + "</td>";
+					output += "<td>" + to_date + "</td>";
+					output += "<td>" + cur_meter_reading + "</td>";
+					output += "<td>" + no_of_units + "</td>";
+					output += "<td>" + current_amount + "</td>";
+					output += "<td>" + arrears + "</td>";
+					output += "<td>" + total_amount + "</td>";
+					output += "<td>" + status + "</td>";
+					 // buttons
+					output += "<td><input name='btnUpdate' "
+					 + " type='button' value='Update'></td>"
+					 + "<td><form method='post'>"
+					 + "<input name='btnRemove' "
+					 + " type='submit' value='Remove' class='btn btn-danger'>"
+					 + "<input name='id' type='hidden'"
+					 + " value='" + id + "'>" + "</form></td></tr>";
+				}
+				
+					con.close();
+					 // Complete the html table
+					output += "</table>";			 
+						
+			 }
+			 catch (Exception e){
+				 output = "Error While Reading the Items!";
+				 System.err.println(e.getMessage());
+			 }
+
+			 return output;
+		}
 
 }

@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,6 +16,13 @@ import model.BillingModel;
 public class BillingService {
 	
 	BillingModel billObj = new BillingModel();
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.TEXT_HTML)
+	public String readBillDetails(){
+		return billObj.readBillDetails();
+	}
 	
 	@POST
 	@Path("/")
