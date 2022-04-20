@@ -353,5 +353,55 @@ public class BillingModel {
 
 			 return output;
 		}
+		
+		public String updateBillDetails(String id, String account_no, String from_date , String to_date, String cur_meter_reading, String status) {
+			
+			String output = "";
+			
+			try{
+				Connection con = connect();
+				if (con == null){
+					return "Error While Connecting to the Database for Updating!"; 
+				}
+				
+				int prev_meter_reading = this.getPrevReading(account_no);
+
+				int no_of_units = this.calculateUnits(Integer.parseInt(cur_meter_reading), prev_meter_reading);
+				
+				float arrears = this.getArrears(account_no, status);
+				
+				float current_amount = this.calculateCurrentAmount(no_of_units);
+				
+				float total_amount = this.calculateTotalAmount(no_of_units, arrears);
+				
+				// create a prepared statement
+				String query = "UPDATE billing_service SET from_date=?, previous_meter_reading=?,to_date=?,current_meter_reading=?,no_of_units=?,current_amount=?,amount_in_arrears=?,total_amount=?,status=? WHERE id=?";
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				// binding values
+				preparedStmt.setString(1, from_date);
+				preparedStmt.setInt(2, prev_meter_reading);
+				preparedStmt.setString(3, to_date);
+				preparedStmt.setInt(4, Integer.parseInt(cur_meter_reading));
+				preparedStmt.setInt(5, no_of_units);
+				preparedStmt.setFloat(6, current_amount);
+				preparedStmt.setFloat(7, arrears);
+				preparedStmt.setFloat(8, total_amount);
+				preparedStmt.setString(9, status);
+				preparedStmt.setInt(10, Integer.parseInt(id));
+				
+				// execute the statement
+				preparedStmt.execute();
+				con.close();
+				output = "Updated Successfully!";
+			
+			}
+			catch (Exception e){
+				output = "Error While Updating the Item!";
+				System.err.println(e.getMessage());
+			}
+			
+			return output;
+			
+		}
 
 }
