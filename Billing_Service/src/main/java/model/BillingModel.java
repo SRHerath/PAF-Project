@@ -109,7 +109,7 @@ public class BillingModel {
 				current_amount = (float) ((float) (60 * 7.85) + (30 * 10.00) + (no_of_units - 90) * 27.75);
 			}
 			else if(no_of_units > 120 && no_of_units <= 180) {
-				current_amount = (float) ((float) (60 * 7.85) + (30 * 10.00) + (30 * 27.75) + (no_of_units - 120) * 32.75);
+				current_amount = (float) ((float) (60 * 7.85) + (30 * 10.00) + (30 * 27.75) + (no_of_units - 120) * 32.00);
 			}
 			else {
 				current_amount = (float) ((float) (60 * 7.85) + (30 * 10.00) + (30 * 27.75) + (60 * 32.00) + (no_of_units - 180) * 45.00);
@@ -402,6 +402,32 @@ public class BillingModel {
 			
 			return output;
 			
+		}
+		
+		public String deleteBillDetails(String account_no){
+			
+			String output = "";
+			try{
+				Connection con = connect();
+			if (con == null){
+				return "Error While Connecting to the Database for Deleting!";
+			}
+			 // create a prepared statement
+			String query = "delete from billing_service where account_no=?";
+			PreparedStatement preparedStmt = (PreparedStatement) con.prepareStatement(query);
+			 // binding values
+			preparedStmt.setString(1, account_no);
+
+			 // execute the statement
+			preparedStmt.execute();
+			con.close();
+			output = "Deleted Successfully!";
+			}
+			catch (Exception e){
+				output = "Error While Deleting the Record!";
+				System.err.println(e.getMessage());
+			}
+			return output;
 		}
 
 }

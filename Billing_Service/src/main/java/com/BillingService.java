@@ -3,6 +3,7 @@ package com;
 import java.sql.Date;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,6 +11,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -65,6 +70,21 @@ public class BillingService {
 		String cur_meter_reading = billObject.get("cur_meter_reading").getAsString();
 		String status = billObject.get("status").getAsString();
 		String output = billObj.updateBillDetails(id, account_no, from_date, to_date, cur_meter_reading, status);
+		
+		return output;
+	}
+	
+	@DELETE
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteBillDetails(String billData){
+		//Convert the input string to an XML document
+		Document doc = Jsoup.parse(billData, "", Parser.xmlParser());
+	
+		//Read the value from the element <itemID>
+		String account_no = doc.select("account_no").text();
+		String output = billObj.deleteBillDetails(account_no);
 		
 		return output;
 	}
