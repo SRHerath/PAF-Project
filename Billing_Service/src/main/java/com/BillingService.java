@@ -38,8 +38,8 @@ public class BillingService {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String insertBillingDetails(@FormParam("account_no") String account_no,
-	 @FormParam("from_date") Date from_date,
-	 @FormParam("to_date") Date to_date,
+	 @FormParam("from_date") String from_date,
+	 @FormParam("to_date") String to_date,
 	 @FormParam("cur_meter_reading") int cur_meter_reading,
 	 @FormParam("status") String status)
 	{
@@ -48,7 +48,12 @@ public class BillingService {
 		{
 			 return "Input Fields Cannot Be Empty!";
 		}
-		
+		if(!from_date.matches("^(?:[0-9][0-9])?[0-9][0-9]-[0-3][0-9]-[0-3][0-9]$")) {
+			return "Date Fields are not in Correct Format!";
+		}
+		if(!to_date.matches("^(?:[0-9][0-9])?[0-9][0-9]-[0-3][0-9]-[0-3][0-9]$")) {
+			return "Date Fields are not in Correct Format!";
+		}
 		else {
 			String output = billObj.insertBillingDetails(account_no, from_date, to_date, cur_meter_reading, status);
 			return output;

@@ -25,7 +25,7 @@ public class BillingModel {
 			 return con;
 		} 
 		
-		public String insertBillingDetails(String account_no, Date from_date, Date to_date, int cur_meter_reading, String status){
+		public String insertBillingDetails(String account_no, String from_date, String to_date, int cur_meter_reading, String status){
 			
 			/*String output = "";*/
 			
@@ -65,9 +65,9 @@ public class BillingModel {
 				pstmnt.setString(1, account_no);
 				pstmnt.setString(2, name);
 				pstmnt.setString(3, address);
-				pstmnt.setDate(4, from_date);
+				pstmnt.setString(4, from_date);
 				pstmnt.setInt(5, prev_meter_reading);
-				pstmnt.setDate(6, to_date);
+				pstmnt.setString(6, to_date);
 				pstmnt.setInt(7, cur_meter_reading);
 				pstmnt.setInt(8, no_of_units);
 				pstmnt.setFloat(9, current_amount);
