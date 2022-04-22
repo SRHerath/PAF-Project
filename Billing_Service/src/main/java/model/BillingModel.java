@@ -347,7 +347,83 @@ public class BillingModel {
 						
 			 }
 			 catch (Exception e){
-				 output = "Error While Reading the Items!";
+				 output = "Error While Reading the Records!";
+				 System.err.println(e.getMessage());
+			 }
+
+			 return output;
+		}
+		
+		public String readBillDetailsbyAccountNo(String acc_no)
+		{
+			 String output = "";
+			 try{
+				 Connection con = connect();
+				 if (con == null){
+					 return "Error While Connecting to the Database for Reading!";
+				 }
+				 
+				output = "<table border='1'><tr><th>Account No</th>"
+						 +"<th>Name</th><th>Address</th>"
+						 +"<th>From Date</th>"
+						 +"<th>Previous Meter Reading</th>"
+						 +"<th>To Date</th>"
+						 +"<th>Current Meter Reading</th>"
+						 +"<th>No of Units</th>"
+						 +"<th>Current Amount</th>"
+						 +"<th>Arrears</th>"
+						 +"<th>Total Amount</th>"
+						 +"<th>Status</th>"
+						 +"<th>Update</th><th>Remove</th></tr>";
+						 String query = "select * from billing_service where account_no = '"+acc_no+"'";
+						 Statement stmt = (Statement) con.createStatement();
+						 ResultSet rs = ((java.sql.Statement) stmt).executeQuery(query); 
+						 
+				while (rs.next()){
+					String id = Integer.toString(rs.getInt("id"));
+					String account_no = rs.getString("account_no");
+					String name = rs.getString("name");
+					String address = rs.getString("address");
+					Date from_date = rs.getDate("from_date");
+					String prev_meter_reading = Integer.toString(rs.getInt("previous_meter_reading"));
+					Date to_date = rs.getDate("to_date");
+					String cur_meter_reading = Integer.toString(rs.getInt("current_meter_reading"));
+					String no_of_units = Integer.toString(rs.getInt("no_of_units"));
+					String current_amount = Float.toString(rs.getFloat("current_amount"));
+					String arrears = Float.toString(rs.getFloat("amount_in_arrears"));
+					String total_amount = Float.toString(rs.getFloat("total_amount"));
+					String status = rs.getString("status");
+					
+					 // Add a row into the html table
+					output += "<tr><td>" + account_no + "</td>";
+					output += "<td>" + name + "</td>";
+					output += "<td>" + address + "</td>";
+					output += "<td>" + from_date + "</td>";
+					output += "<td>" + prev_meter_reading + "</td>";
+					output += "<td>" + to_date + "</td>";
+					output += "<td>" + cur_meter_reading + "</td>";
+					output += "<td>" + no_of_units + "</td>";
+					output += "<td>" + current_amount + "</td>";
+					output += "<td>" + arrears + "</td>";
+					output += "<td>" + total_amount + "</td>";
+					output += "<td>" + status + "</td>";
+					 // buttons
+					output += "<td><input name='btnUpdate' "
+					 + " type='button' value='Update'></td>"
+					 + "<td><form method='post'>"
+					 + "<input name='btnRemove' "
+					 + " type='submit' value='Remove' class='btn btn-danger'>"
+					 + "<input name='id' type='hidden'"
+					 + " value='" + id + "'>" + "</form></td></tr>";
+				}
+				
+					con.close();
+					 // Complete the html table
+					output += "</table>";			 
+						
+			 }
+			 catch (Exception e){
+				 output = "Error While Reading the Records!";
 				 System.err.println(e.getMessage());
 			 }
 
@@ -364,7 +440,11 @@ public class BillingModel {
 					return "Error While Connecting to the Database for Updating!"; 
 				}
 				
-				int prev_meter_reading = this.getPrevReading(account_no);
+				// create a prepared statement
+				String query = "UPDATE billing_service SET from_date=?, previous_meter_reading=?,to_date=?,current_meter_reading=?,no_of_units=?,current_amount=?,amount_in_arrears=?,total_amount=?,status=? WHERE id=?";
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				
+				int prev_meter_reading = this.getPrevReadingforUpdate(account_no);
 
 				int no_of_units = this.calculateUnits(Integer.parseInt(cur_meter_reading), prev_meter_reading);
 				
@@ -374,9 +454,6 @@ public class BillingModel {
 				
 				float total_amount = this.calculateTotalAmount(no_of_units, arrears);
 				
-				// create a prepared statement
-				String query = "UPDATE billing_service SET from_date=?, previous_meter_reading=?,to_date=?,current_meter_reading=?,no_of_units=?,current_amount=?,amount_in_arrears=?,total_amount=?,status=? WHERE id=?";
-				PreparedStatement preparedStmt = con.prepareStatement(query);
 				// binding values
 				preparedStmt.setString(1, from_date);
 				preparedStmt.setInt(2, prev_meter_reading);
@@ -392,16 +469,55 @@ public class BillingModel {
 				// execute the statement
 				preparedStmt.execute();
 				con.close();
-				output = "Updated Successfully!";
+				output = "Billing Details Updated Successfully!";
 			
 			}
 			catch (Exception e){
-				output = "Error While Updating the Item!";
+				output = "Error While Updating the Record!";
 				System.err.println(e.getMessage());
 			}
 			
 			return output;
 			
+		}
+		
+		private int getPrevReadingforUpdate(String account_no) {
+			
+			int prev_reading = 0;
+			
+			try {
+				
+				Connection con = connect();
+				
+				String getquery = "select previous_meter_reading\n"
+								+ "from billing_service\n"
+								+ "where account_no = ?; ";
+				
+				PreparedStatement pstmt = con.prepareStatement(getquery);
+				pstmt.setString(1, account_no);
+
+				int cur_reading= 0;
+				
+				ResultSet rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					
+					
+					cur_reading = rs.getInt("current_meter_reading");
+					
+				}
+				con.close();
+				
+				prev_reading = cur_reading;
+				
+				
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			return prev_reading;
+				
 		}
 		
 		public String deleteBillDetails(String account_no){
@@ -421,7 +537,7 @@ public class BillingModel {
 			 // execute the statement
 			preparedStmt.execute();
 			con.close();
-			output = "Deleted Successfully!";
+			output = "Billing Details Deleted Successfully!";
 			}
 			catch (Exception e){
 				output = "Error While Deleting the Record!";
