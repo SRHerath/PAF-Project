@@ -1,0 +1,41 @@
+package com;
+
+import model.UserManagement; 
+//For REST Service
+import javax.ws.rs.*; 
+import javax.ws.rs.core.MediaType; 
+//For JSON
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+@Path("/UserService")
+public class UserService {
+	
+	UserManagement userObj = new UserManagement();
+    @GET
+    @Path("/read")
+    @Produces(MediaType.TEXT_HTML)
+    public String readItems()
+    {
+   	 return userObj.readItems();
+    }
+    
+    
+	// insert user Management API
+	@POST
+	@Path("/add")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_PLAIN)
+
+	public String insertUsertManagement(@FormParam("name") String name, @FormParam("phoneNum") String phoneNum,
+			@FormParam("email") String email, @FormParam("account_no") String account_no) {
+		String output = userObj.insertUserManagement(name, phoneNum, email,account_no );
+		return output;
+	}
+
+}
