@@ -117,6 +117,65 @@ public class Payment {
 	 } 
 	
 	
+	
+	//read latest record
+	public String readAPayment()
+	 {
+	 String output = "";
+	 try
+	 {
+	 Connection con = connect();
+	 if (con == null)
+	 {return "Error while connecting to the database for reading."; }
+	 // Prepare the html table to be displayed
+	 output = "<table border='1'><tr><th>Owner Name</th><th>Card No</th>" +
+	 "<th>Exp. Month</th><th>Exp. Year</th>" +
+	 "<th>Amount</th><th>CVC/CVV</th><th>Date</th>" +
+	 "<th>Update</th><th>Remove</th></tr>";
+
+	 String query = "select * from payment where PayID= (Select max(PayID) from payment)";
+	 Statement stmt = con.createStatement();
+	 ResultSet rs = stmt.executeQuery(query);
+	 // iterate through the rows in the result set
+	 while (rs.next())
+	 {
+	 String PayID = Integer.toString(rs.getInt("PayID"));
+	 String CardName = rs.getString("CardName");
+	 String CardNumber = rs.getString("CardNumber");
+	 String Ex_Month = rs.getString("Ex_Month");
+	 String Ex_Year = rs.getString("Ex_Year");
+	 String Amount = rs.getString("Amount");
+	 String CV = rs.getString("CV");
+	 String Date = rs.getString("Date");
+	 // Add into the html table
+	 output += "<tr><td>" + CardName + "</td>";
+	 output += "<td>" + CardNumber + "</td>";
+	 output += "<td>" + Ex_Month + "</td>";
+	 output += "<td>" + Ex_Year + "</td>";
+	 output += "<td>" + Amount + "</td>";
+	 output += "<td>" + CV + "</td>";
+	 output += "<td>" + Date + "</td>";
+	 // buttons
+	 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-secondary'></td>"
+	 + "<td><form method='post' action='payment.jsp'>"
+	 + "<input name='btnRemove' type='submit' value='Remove' class='btn btn-danger'>"
+	 + "<input name='itemID' type='hidden' value='" + PayID
+	 + "'>" + "</form></td></tr>";
+	 }
+	 con.close();
+	 // Complete the html table
+	 output += "</table>";
+	 }
+	 catch (Exception e)
+	 {
+	 output = "Error while reading the items.";
+	 System.err.println(e.getMessage());
+	 }
+	 return output;
+	 } 
+	
+	
+	//update
 	public String updatePayment(String payID,String cname, String cno, String exmnth, String exyr,String amount, String cvv, String tdate)
 	{ 
 	 String output = ""; 

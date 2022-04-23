@@ -26,6 +26,14 @@ public class PaymentService {
 		return PaymentObj.readPayment();
 	 } 
 	
+	@GET
+	@Path("//")
+	@Produces(MediaType.TEXT_HTML)
+	public String readAPayment()
+	 {
+		return PaymentObj.readAPayment();
+	 } 
+	
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
