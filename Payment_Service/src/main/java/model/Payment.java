@@ -19,6 +19,7 @@ public class Payment {
 	 }
 	
 	
+	//insert
 	public String insertPayment(String cname, String cno, String exmnth, String exyr,String amount, String cvv, String tdate)
 	{ 
 	 String output = ""; 
