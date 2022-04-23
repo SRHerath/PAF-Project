@@ -59,6 +59,8 @@ public class Payment {
 	}
 	
 	
+	
+	//read
 	public String readPayment()
 	 {
 	 String output = "";
