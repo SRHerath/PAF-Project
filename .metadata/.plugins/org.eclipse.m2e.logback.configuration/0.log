@@ -884,3 +884,7 @@
 2022-04-24 16:54:01,625 [Worker-68: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Sahan\Desktop\qqqqqqq\PAF-Project-master\UserManagement\src\main\resources
 2022-04-24 16:54:01,631 [Worker-68: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
 2022-04-24 16:54:01,634 [Worker-68: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Sahan\Desktop\qqqqqqq\PAF-Project-master\UserManagement\src\test\resources
+2022-04-24 17:02:09,318 [Worker-72: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2022-04-24 17:02:09,323 [Worker-72: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Sahan\Desktop\qqqqqqq\PAF-Project-master\UserManagement\src\main\resources
+2022-04-24 17:02:09,330 [Worker-72: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1252 actually) to copy filtered resources, i.e. build is platform dependent!
+2022-04-24 17:02:09,334 [Worker-72: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\Sahan\Desktop\qqqqqqq\PAF-Project-master\UserManagement\src\test\resources

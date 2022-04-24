@@ -61,8 +61,7 @@ public class UserService {
 		return output;
 		
 	}
-			// Delete
-			
+			// Delete operation
 	
 			@DELETE
 			@Path("/delete") 
