@@ -191,7 +191,7 @@ public String updateUserManagement(String userID, String name, String phoneNum, 
 		    preparedStmt.execute(); 
 		    con.close(); 
 		    
-		    output = "User range Deleted successfully"; 
+		    output = "User Deleted successfully"; 
 	  } 
 	   catch (Exception e) 
 	  { 
