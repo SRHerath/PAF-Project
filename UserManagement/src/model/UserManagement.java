@@ -174,7 +174,7 @@ public String updateUserManagement(String userID, String name, String phoneNum, 
 	 { 
 		       Connection con = connect(); 
 		       
-		       if (con == null) 
+		       if (con == null)	   
 		      {
 		    	   return "Error while connecting to the database for deleting."; 
 		      } 
