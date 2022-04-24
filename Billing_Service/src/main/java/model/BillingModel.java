@@ -448,7 +448,7 @@ public class BillingModel {
 
 				int no_of_units = this.calculateUnits(Integer.parseInt(cur_meter_reading), prev_meter_reading);
 				
-				float arrears = this.getArrears(account_no, status);
+				float arrears = this.getArrearsforUpdate(account_no);
 				
 				float current_amount = this.calculateCurrentAmount(no_of_units);
 				
@@ -503,7 +503,7 @@ public class BillingModel {
 				while (rs.next()) {
 					
 					
-					cur_reading = rs.getInt("current_meter_reading");
+					cur_reading = rs.getInt("previous_meter_reading");
 					
 				}
 				con.close();
@@ -518,6 +518,43 @@ public class BillingModel {
 			
 			return prev_reading;
 				
+		}
+		
+		private float getArrearsforUpdate(String account_no) {
+			
+			float arrears = 0;
+			
+			try {
+				
+				Connection con = connect();
+				
+				String getQuery = "select amount_in_arrears\n"
+								+ "from billing_service\n"
+								+ "where account_No = ? ; ";
+	
+				PreparedStatement pstmt = con.prepareStatement(getQuery);
+				pstmt.setString(1, account_no);
+			
+				float arrears_n= 0;
+				
+				ResultSet rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					
+					
+					arrears_n = rs.getFloat("amount_in_arrears");
+					
+				}
+				con.close();
+				
+				 
+				arrears = arrears_n;
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			return arrears;
 		}
 		
 		public String deleteBillDetails(String account_no){
