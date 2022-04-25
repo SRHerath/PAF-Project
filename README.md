@@ -3,7 +3,7 @@
 
 # Group No 69
 
-# Data Science Batch 04 (Weenend)
+# Data Science Batch 04 (Weekend)
 
 
 
