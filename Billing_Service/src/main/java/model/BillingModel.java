@@ -25,9 +25,10 @@ public class BillingModel {
 			 return con;
 		} 
 		
+		//Method to insert billing details
 		public String insertBillingDetails(String account_no, String from_date, String to_date, int cur_meter_reading, String status){
 			
-			/*String output = "";*/
+			
 			
 			try{
 				Connection con = connect();
@@ -36,7 +37,7 @@ public class BillingModel {
 				return "Error While Connecting to the Database for Inserting!";
 			}
 			
-			
+				//Insert Query
 				String insertQuery = " insert into billing_service values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmnt = con.prepareStatement(insertQuery);
 				
@@ -54,12 +55,12 @@ public class BillingModel {
 				
 				String address = this.getUserAddress(account_no);
 				
-				// create a prepared statement for delete previous records by account_no
+				//Create a prepared statement for delete previous records by account_no
 				String query = "delete from billing_service where account_no=?";
 				PreparedStatement preparedStmt = (PreparedStatement) con.prepareStatement(query);
-				// binding values
+				//Binding values
 				preparedStmt.setInt(1, Integer.parseInt(account_no));
-				// execute the statement
+				//Execute the statement
 				preparedStmt.execute();
 				
 				pstmnt.setString(1, account_no);
@@ -82,10 +83,12 @@ public class BillingModel {
 			} 
 			
 			catch (SQLException e) {
+				//Error Message
 				return "Error Occur During Inserting!\n" + e.getMessage();
 			}
 		}
 		
+		//Calculate the unit usage
 		public int calculateUnits(int cur_meter_reading, int prev_meter_reading) {
 			
 			int no_of_units = 0;
@@ -95,6 +98,7 @@ public class BillingModel {
 			return no_of_units;
 		}
 		
+		//Calculate current amount
 		public float calculateCurrentAmount(int no_of_units) {
 			
 			float current_amount = 0;
@@ -119,6 +123,7 @@ public class BillingModel {
 			
 		}
 		
+		//Calculate total amount
 		public float calculateTotalAmount(int no_of_units, float arrears) {
 			
 			float total_amount = this.calculateCurrentAmount(no_of_units) + arrears;
@@ -127,6 +132,7 @@ public class BillingModel {
 			
 		}
 		
+		//Get previous arrears
 		private float getArrears(String account_no, String status) {
 			
 			float arrears = 0;
@@ -164,6 +170,7 @@ public class BillingModel {
 			return arrears;
 		}
 		
+		//Get previous meter reading from previous records
 		private int getPrevReading(String account_no) {
 			
 			int prev_reading = 0;
@@ -203,7 +210,7 @@ public class BillingModel {
 				
 			}
 			
-
+		//Get user address from user table
 		private String getUserAddress(String account_no) {
 			
 			String address = "";
@@ -241,6 +248,7 @@ public class BillingModel {
 			
 		}
 		
+		//Get user name from user table
 		private String getUserName(String account_no) {
 			
 			String name = "";
@@ -278,6 +286,7 @@ public class BillingModel {
 			
 		}
 		
+		//Method for view bill details
 		public String readBillDetails()
 		{
 			 String output = "";
@@ -354,6 +363,7 @@ public class BillingModel {
 			 return output;
 		}
 		
+		//Method for view bill details by account no
 		public String readBillDetailsbyAccountNo(String acc_no)
 		{
 			 String output = "";
@@ -430,6 +440,7 @@ public class BillingModel {
 			 return output;
 		}
 		
+		//Method for update bill details
 		public String updateBillDetails(String id, String account_no, String from_date , String to_date, String cur_meter_reading, String status) {
 			
 			String output = "";
@@ -481,6 +492,7 @@ public class BillingModel {
 			
 		}
 		
+		//Get previous meter reading for update
 		private int getPrevReadingforUpdate(String account_no) {
 			
 			int prev_reading = 0;
@@ -520,6 +532,7 @@ public class BillingModel {
 				
 		}
 		
+		//Get arrears for update
 		private float getArrearsforUpdate(String account_no) {
 			
 			float arrears = 0;
@@ -557,6 +570,7 @@ public class BillingModel {
 			return arrears;
 		}
 		
+		//Method for delete bill details 
 		public String deleteBillDetails(String account_no){
 			
 			String output = "";
